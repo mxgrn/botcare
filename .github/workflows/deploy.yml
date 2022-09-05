@@ -1,0 +1,50 @@
+name: Production
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    name: Deploy
+    strategy:
+      matrix:
+        app: [botcare]
+        env: [prod]
+        os: [ubuntu-18.04]
+        otp: [25.0.3]
+        elixir: [1.14.0]
+        # host port that will be mapped to Docker's 4000
+        port: [8030]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log into GHCR
+        run: echo "${{secrets.GITHUB_TOKEN}}" | docker login https://ghcr.io -u ${{github.actor}} --password-stdin
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: ghcr.io/mxgrn/${{matrix.app}}:latest
+
+      - name: Pull image on host, restart, run migrations
+        uses: appleboy/ssh-action@master
+        with:
+          host: 159.89.18.195
+          username: deploy
+          key: ${{ secrets.DEPLOYMENT_KEY }}
+          envs: SECRET_KEY_BASE,DATABASE_URL
+          script_stop: true
+          script: |
+            docker pull ghcr.io/mxgrn/${{matrix.app}}
+            docker stop ${{matrix.app}}_prod || true
+            docker run -d --rm -e SECRET_KEY_BASE=${{secrets.SECRET_KEY_BASE}} -e DATABASE_URL=${{secrets.DATABASE_URL}} ghcr.io/mxgrn/${{matrix.app}} /app/bin/migrate
+            docker run --name=${{matrix.app}}_prod -d --rm -p ${{matrix.port}}:4000 -e PHX_SERVER=true -e SECRET_KEY_BASE=${{secrets.SECRET_KEY_BASE}} -e DATABASE_URL=${{secrets.DATABASE_URL}} -e GITHUB_SHA=${{github.sha}} ghcr.io/mxgrn/${{matrix.app}}
