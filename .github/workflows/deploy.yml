@@ -47,4 +47,11 @@ jobs:
             docker pull ghcr.io/mxgrn/${{matrix.app}}
             docker stop ${{matrix.app}}_prod || true
             docker run -d --rm -e SECRET_KEY_BASE=${{secrets.SECRET_KEY_BASE}} -e DATABASE_URL=${{secrets.DATABASE_URL}} ghcr.io/mxgrn/${{matrix.app}} /app/bin/migrate
-            docker run --name=${{matrix.app}}_prod -d --rm -p ${{matrix.port}}:4000 -e PHX_SERVER=true -e SECRET_KEY_BASE=${{secrets.SECRET_KEY_BASE}} -e DATABASE_URL=${{secrets.DATABASE_URL}} -e GITHUB_SHA=${{github.sha}} ghcr.io/mxgrn/${{matrix.app}}
+            docker run --name=${{matrix.app}}_prod -d --rm -p ${{matrix.port}}:4000 \
+              -e PHX_SERVER=true \
+              -e SECRET_KEY_BASE=${{secrets.SECRET_KEY_BASE}} \
+              -e DATABASE_URL=${{secrets.DATABASE_URL}} \
+              -e GITHUB_SHA=${{github.sha}} \
+              -e BASIC_AUTH_USERNAME=${{secrets.BASIC_AUTH_USERNAME}} \
+              -e BASIC_AUTH_PASSWORD=${{secrets.BASIC_AUTH_PASSWORD}} \
+              ghcr.io/mxgrn/${{matrix.app}}

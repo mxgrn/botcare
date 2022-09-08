@@ -10,12 +10,16 @@ defmodule BotcareWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :auth do
+    plug :basic_auth
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
   scope "/", BotcareWeb do
-    pipe_through :browser
+    pipe_through [:browser, :auth]
 
     get "/", PageController, :index
   end
@@ -52,5 +56,11 @@ defmodule BotcareWeb.Router do
 
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
+  end
+
+  defp basic_auth(conn, _opts) do
+    username = System.fetch_env!("BASIC_AUTH_USERNAME")
+    password = System.fetch_env!("BASIC_AUTH_PASSWORD")
+    Plug.BasicAuth.basic_auth(conn, username: username, password: password)
   end
 end
