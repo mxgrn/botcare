@@ -6,6 +6,7 @@ defmodule Botcare.Repo.Migrations.CreateBots do
       add :username, :string, null: false
       add :endpoint, :string, null: false
       add :active, :boolean, default: true, null: false
+      add :maintenance_message, :string
       add :token, :binary, null: false
 
       timestamps()

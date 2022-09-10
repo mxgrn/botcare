@@ -21,6 +21,10 @@ defmodule Botcare.Bots do
     Repo.all(Bot)
   end
 
+  def get(id) do
+    Repo.get(Bot, id)
+  end
+
   @doc """
   Gets a single bot.
 

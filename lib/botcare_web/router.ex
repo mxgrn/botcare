@@ -31,7 +31,7 @@ defmodule BotcareWeb.Router do
 
   scope "/", BotcareWeb do
     pipe_through [:api]
-    post "/maintenance", WebhookController, :maintenance
+    post "/:bot_id/maintenance", WebhookController, :maintenance
 
     # temp for testing
     post "/active", WebhookController, :active

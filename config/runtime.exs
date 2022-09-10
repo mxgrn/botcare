@@ -59,7 +59,7 @@ if config_env() == :prod do
   port = String.to_integer(System.get_env("PORT") || "4000")
 
   config :botcare, BotcareWeb.Endpoint,
-    url: [host: host, port: 443, scheme: "https"],
+    url: [host: host],
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
@@ -88,3 +88,5 @@ if config_env() == :prod do
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
 end
+
+config :botcare, :telegram, webhook_secret: System.fetch_env!("TELEGRAM_WEBHOOK_SECRET")

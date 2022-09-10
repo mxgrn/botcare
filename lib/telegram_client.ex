@@ -5,7 +5,16 @@ defmodule TelegramClient do
   plug Tesla.Middleware.JSON
 
   def set_webhook(bot, url) do
-    get("/bot#{bot.token}/setWebhook?url=#{url}")
+    webhook_secret = Application.get_env(:botcare, :telegram)[:webhook_secret]
+
+    "/bot#{bot.token}/setWebhook"
+    |> post(%{url: url, secret_token: webhook_secret})
+    |> parse_response()
+  end
+
+  def send_message(bot, chat_id, message) do
+    "/bot#{bot.token}/sendMessage"
+    |> post(%{chat_id: chat_id, text: message})
     |> parse_response()
   end
 

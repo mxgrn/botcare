@@ -18,7 +18,7 @@ jobs:
         elixir: [1.14.0]
         # host port that will be mapped to Docker's 4000
         port: [8030]
-        host: [159.89.18.195, 159.89.26.201]
+        host: [159.89.18.195]
 
     steps:
       - name: Checkout
@@ -56,6 +56,7 @@ jobs:
               -e BASIC_AUTH_PASSWORD=${{secrets.BASIC_AUTH_PASSWORD}} \
               -e CLOAK_KEY=${{secrets.CLOAK_KEY}} \
               -e PHX_HOST=${{secrets.PHX_HOST}} \
+              -e TELEGRAM_WEBHOOK_SECRET=${{secrets.TELEGRAM_WEBHOOK_SECRET}} \
               ghcr.io/mxgrn/${{matrix.app}}
             while [ "`docker inspect -f {{.State.Running}} ${{matrix.app}}_prod`" != "true" ]; do sleep 1; done
             docker exec botcare_prod /app/bin/migrate

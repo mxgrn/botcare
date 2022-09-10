@@ -45,7 +45,7 @@ defmodule BotcareWeb.BotLive.Index do
 
     new_webhook_url =
       case bot do
-        %{active: true} -> maintenance_url()
+        %{active: true} -> maintenance_url(socket, id)
         %{active: false} -> bot.endpoint
       end
 
@@ -66,7 +66,8 @@ defmodule BotcareWeb.BotLive.Index do
     Bots.list_bots()
   end
 
-  defp maintenance_url() do
-    BotcareWeb.Endpoint.url() <> "/maintenance"
+  defp maintenance_url(socket, id) do
+    Routes.webhook_url(socket, :maintenance, id)
+    # BotcareWeb.Endpoint.url() <> "/maintenance"
   end
 end

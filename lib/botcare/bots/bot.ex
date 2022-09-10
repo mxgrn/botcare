@@ -7,6 +7,7 @@ defmodule Botcare.Bots.Bot do
     field :endpoint, :string
     field :token, Botcare.Encrypted.Binary
     field :active, :boolean, default: true
+    field :maintenance_message, :string
 
     timestamps()
   end
@@ -14,7 +15,7 @@ defmodule Botcare.Bots.Bot do
   @doc false
   def changeset(bot, attrs) do
     bot
-    |> cast(attrs, [:username, :endpoint, :token, :active])
+    |> cast(attrs, [:username, :endpoint, :token, :active, :maintenance_message])
     |> validate_required([:username, :endpoint, :token, :active])
   end
 end
