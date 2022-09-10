@@ -36,6 +36,7 @@ defmodule BotcareWeb.WebhookController do
   defp extract_chat_id(%{"channel_post" => %{"chat" => %{"id" => id}}}), do: {:ok, id}
   defp extract_chat_id(%{"edited_channel_post" => %{"chat" => %{"id" => id}}}), do: {:ok, id}
   defp extract_chat_id(%{"inline_query" => %{"from" => %{"id" => id}}}), do: {:ok, id}
+  defp extract_chat_id(%{"callback_query" => %{"from" => %{"id" => id}}}), do: {:ok, id}
   defp extract_chat_id(%{"chosen_inline_result" => %{"from" => %{"id" => id}}}), do: {:ok, id}
   defp extract_chat_id(%{"pre_checkout_query" => %{"from" => %{"id" => id}}}), do: {:ok, id}
   defp extract_chat_id(%{"my_chat_member" => %{"chat" => %{"id" => id}}}), do: {:ok, id}
