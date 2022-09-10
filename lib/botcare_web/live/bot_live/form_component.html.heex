@@ -1,0 +1,31 @@
+<div>
+  <h2><%= @title %></h2>
+
+  <.form
+    let={f}
+    for={@changeset}
+    id="bot-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+  >
+    <%= label(f, :username, "Bot username") %>
+    <%= text_input(f, :username, placeholder: "somebot") %>
+    <%= error_tag(f, :username) %>
+
+    <%= label(f, :endpoint) %>
+    <%= text_input(f, :endpoint, placeholder: "https://mybot.com/endpoint") %>
+    <%= error_tag(f, :endpoint) %>
+
+    <%= label(f, :token) %>
+    <%= text_input(f, :token, placeholder: "1234567890:AXE7Q4Q12YmxttvEaEmKFxU6LIOZuZjwtbo") %>
+    <%= error_tag(f, :token) %>
+
+    <%= label(f, :active) %>
+    <%= checkbox(f, :active) %>
+
+    <div>
+      <%= submit("Save", phx_disable_with: "Saving...") %>
+    </div>
+  </.form>
+</div>

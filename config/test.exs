@@ -28,3 +28,7 @@ config :logger, level: :warn
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
+
+System.put_env("CLOAK_KEY", "QMitIAKCydI/RTjYJYMLvLym4qUn67Ta4XoDZf8K0A0=")
+System.put_env("BASIC_AUTH_USERNAME", "username")
+System.put_env("BASIC_AUTH_PASSWORD", "password")

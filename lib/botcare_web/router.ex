@@ -21,7 +21,12 @@ defmodule BotcareWeb.Router do
   scope "/", BotcareWeb do
     pipe_through [:browser, :auth]
 
-    get "/", PageController, :index
+    live "/", BotLive.Index, :index
+    live "/bots/new", BotLive.Index, :new
+    live "/bots/:id/edit", BotLive.Index, :edit
+
+    live "/bots/:id", BotLive.Show, :show
+    live "/bots/:id/show/edit", BotLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.

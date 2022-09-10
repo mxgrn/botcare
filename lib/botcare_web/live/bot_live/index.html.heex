@@ -1,0 +1,45 @@
+<span><%= live_patch("New Bot", to: Routes.bot_index_path(@socket, :new)) %></span>
+
+<%= if @live_action in [:new, :edit] do %>
+  <.modal return_to={Routes.bot_index_path(@socket, :index)}>
+    <.live_component
+      module={BotcareWeb.BotLive.FormComponent}
+      id={@bot.id || :new}
+      title={@page_title}
+      action={@live_action}
+      bot={@bot}
+      return_to={Routes.bot_index_path(@socket, :index)}
+    />
+  </.modal>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="bots">
+    <%= for bot <- @bots do %>
+      <tr id={"bot-#{bot.id}"}>
+        <td>
+          <%= live_patch("@" <> bot.username, to: Routes.bot_index_path(@socket, :edit, bot)) %>
+        </td>
+        <td style="text-align: right">
+          <span style="cursor: pointer" phx-click="toggle" phx-value-id={bot.id}>
+            <%= if bot.active, do: "🟢", else: "🔴" %>&nbsp;
+          </span>
+          <span>
+            <%= link("Delete",
+              to: "#",
+              phx_click: "delete",
+              phx_value_id: bot.id,
+              data: [confirm: "Are you sure?"]
+            ) %>
+          </span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

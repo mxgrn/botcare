@@ -15,7 +15,8 @@ defmodule Botcare.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Botcare.PubSub},
       # Start the Endpoint (http/https)
-      BotcareWeb.Endpoint
+      BotcareWeb.Endpoint,
+      Botcare.Vault
       # Start a worker by calling: Botcare.Worker.start_link(arg)
       # {Botcare.Worker, arg}
     ]

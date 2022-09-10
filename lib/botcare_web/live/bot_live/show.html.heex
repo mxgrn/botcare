@@ -1,0 +1,37 @@
+<h1>Show Bot</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.bot_show_path(@socket, :show, @bot)}>
+    <.live_component
+      module={BotcareWeb.BotLive.FormComponent}
+      id={@bot.id}
+      title={@page_title}
+      action={@live_action}
+      bot={@bot}
+      return_to={Routes.bot_show_path(@socket, :show, @bot)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+  <li>
+    <strong>Name:</strong>
+    <%= @bot.username %>
+  </li>
+
+  <li>
+    <strong>State:</strong>
+    <%= @bot.state %>
+  </li>
+
+  <li>
+    <strong>Token:</strong>
+    <%= @bot.token %>
+  </li>
+</ul>
+
+<span>
+  <%= live_patch("Edit", to: Routes.bot_show_path(@socket, :edit, @bot), class: "button") %>
+</span>
+|
+<span><%= live_redirect("Back", to: Routes.bot_index_path(@socket, :index)) %></span>

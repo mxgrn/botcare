@@ -29,6 +29,10 @@ config :botcare, BotcareWeb.Endpoint,
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
   ]
 
+System.put_env("CLOAK_KEY", "QMitIAKCydI/RTjYJYMLvLym4qUn67Ta4XoDZf8K0A0=")
+System.put_env("BASIC_AUTH_USERNAME", "username")
+System.put_env("BASIC_AUTH_PASSWORD", "password")
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
