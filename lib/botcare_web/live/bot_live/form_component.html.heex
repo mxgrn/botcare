@@ -21,9 +21,6 @@
     <%= text_input(f, :token, placeholder: "1234567890:AXE7Q4Q12YmxttvEaEmKFxU6LIOZuZjwtbo") %>
     <%= error_tag(f, :token) %>
 
-    <%= label(f, :active) %>
-    <%= checkbox(f, :active) %>
-
     <div>
       <%= submit("Save", phx_disable_with: "Saving...") %>
     </div>

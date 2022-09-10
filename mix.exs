@@ -49,7 +49,9 @@ defmodule Botcare.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:cloak_ecto, "~>1.2.0"}
+      {:cloak_ecto, "~>1.2.0"},
+      {:tesla, "~> 1.4"},
+      {:hackney, "~> 1.17"}
     ]
   end
 

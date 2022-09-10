@@ -29,6 +29,14 @@ defmodule BotcareWeb.Router do
     live "/bots/:id/show/edit", BotLive.Show, :edit
   end
 
+  scope "/", BotcareWeb do
+    pipe_through [:api]
+    post "/maintenance", WebhookController, :maintenance
+
+    # temp for testing
+    post "/active", WebhookController, :active
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", BotcareWeb do
   #   pipe_through :api

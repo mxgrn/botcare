@@ -77,6 +77,9 @@ After this you'll be able to connect from the app host (probably on the same net
 
 ## Running locally
 
+In order to receive webhook calls from Telegram, you need a solution like ngrok. See `config/dev.local.exs.example` on
+how to configure the ngrok host.
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`

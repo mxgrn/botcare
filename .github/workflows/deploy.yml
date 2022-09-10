@@ -55,4 +55,5 @@ jobs:
               -e BASIC_AUTH_USERNAME=${{secrets.BASIC_AUTH_USERNAME}} \
               -e BASIC_AUTH_PASSWORD=${{secrets.BASIC_AUTH_PASSWORD}} \
               -e CLOAK_KEY=${{secrets.CLOAK_KEY}} \
+              -e PHX_HOST=${{secrets.PHX_HOST}} \
               ghcr.io/mxgrn/${{matrix.app}}

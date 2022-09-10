@@ -42,11 +42,31 @@ defmodule BotcareWeb.BotLive.Index do
 
   def handle_event("toggle", %{"id" => id}, socket) do
     bot = Bots.get_bot!(id)
-    Bots.toggle!(bot)
-    {:noreply, assign(socket, :bots, list_bots())}
+
+    new_webhook_url =
+      case bot do
+        %{active: true} -> maintenance_url()
+        %{active: false} -> bot.endpoint
+      end
+
+    TelegramClient.set_webhook(bot, new_webhook_url)
+    |> case do
+      :ok ->
+        Bots.toggle!(bot)
+        {:noreply, assign(socket, :bots, list_bots())}
+
+      _ ->
+        {:noreply,
+         socket
+         |> put_flash(:error, "Could not update webhook URL")}
+    end
   end
 
   defp list_bots do
     Bots.list_bots()
+  end
+
+  defp maintenance_url() do
+    BotcareWeb.Endpoint.url() <> "/maintenance"
   end
 end

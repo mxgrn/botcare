@@ -7,14 +7,12 @@ defmodule BotcareWeb.BotLiveTest do
   @create_attrs %{
     username: "some name",
     endpoint: "some endpoint",
-    active: true,
     token: "some token"
   }
 
   @update_attrs %{
     username: "some updated username",
     endpoint: "some updated endpoint",
-    active: false,
     token: "some updated token"
   }
 
