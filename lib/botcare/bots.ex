@@ -18,7 +18,8 @@ defmodule Botcare.Bots do
 
   """
   def list_bots do
-    Repo.all(Bot)
+    from(b in Bot, order_by: [desc: b.inserted_at])
+    |> Repo.all()
   end
 
   def get(id) do
