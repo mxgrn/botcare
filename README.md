@@ -1,79 +1,30 @@
 # Botcare
 
-## Preparing for deployment
+This self-hosted webapp can help you put your Telegram bots into a gracefully implemented "maintenance mode".
 
-The following preparations proved to be enough to run deployment via Docker on Digital Ocean.
+If you write Telegrab bots, you may occasionally face the following problem: a bot may need to go offline. One reason for
+it may be moving the bot over to another host, or do some other non-trivial updates that require downtime. During such
+periods, your bot's users should not be left in the dark by the bot silently swallowing their messages or actions.
+Instead, a maintenance warning should be sent back to the users, and no unprocessed messages should accumulate in
+Telegram's queue.
 
-This is a 2-host setup, with 1) LB/DB host, and 2) app host. More app hosts can be added for redundancy once needed.
+This is exactly what this app helps you with. After configuring your bots, you will be able to move them in and out of
+the maintenance mode by a single click of a button.
 
-### Database
+## Note about (self-)hosting
 
-SSH to the LBDB host.
+This is meant to be a self-hosted app because it requires storing the bot's auth token in the database. It gets
+encrypted, but the hosting party has access to the encryption key (stored as a Github secret).
 
-    # su postgres
-    # psql
+However, should you prefer to trust someone like me storing those keys, I may consider publicly hosting an extended,
+multi-user version of this app as a service. In such case, [send me a tweet](https://twitter.com/mxgrn).
 
-Create role `botcare_prod`:
+## Getting started
 
-    create role botcare_prod password '***';
-    alter user botcare_prod superuser;
-    alter role botcare_prod with login;
+Configure a bot by providing its handle, token (ask BotFather), and the endpoint (the one you provided to setWebhook API
+method). Optionally, type in a custom maintenance message specific for this bot (if omitted, a default one will be used).
 
-Create DB:
-
-    create database botcare_prod with owner = botcare_prod;
-
-After this you'll be able to connect from the app host (probably on the same network) with:
-
-    postgres://botcare_prod:<password>@<db-host-IP>:5432/botcare_prod
-
-### Github secrets
-
-`DEPLOYMENT_KEY` must be the private part of the key accepted by `.ssh/authorized_keys` of the user "deploy".
-
-### Authenticating with ghcr.io
-
-  * SSH to the app host
-  * Run `docker login ghcr.io`, authenticate with GH username and PAT (personal access token) generated with
-  write/read/delete:packeges scopes
-  * Make sure that `docker pull ghcr.io/<your-GH-username>/botcare` works
-
-### NGINX
-
-  * SSH to LBDB host
-  * Add /etc/nginx/sites-enabled/botcare-prod:
-
-       ```
-        upstream botcare-prod {
-          server 10.135.0.4:8030;
-        # might be added later for redundant app hosts
-        # server 10.135.0.5:8031;
-        }
-
-        server {
-          server_name botcare.mxgrn.com;
-
-          location / {
-            include proxy_params;
-            proxy_pass http://botcare-prod;
-
-            # The following two headers need to be set in order
-            # to keep the websocket connection open. Otherwise you'll see
-            # HTTP 400's being returned from websocket connections.
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection "upgrade";
-          }
-        }
-      ```
-
-  * Restart nginx with `nginx -s reload`
-
-### SSL
-
-  * SSH to lbdb
-  * Run certbot --nginx
-  * Follow instructions
+After this, click the green/red icon on the bot list to move the bot in/out of the maintenance mode.
 
 ## Running locally
 
@@ -86,14 +37,12 @@ To start your Phoenix server:
   * Create and migrate your database with `mix ecto.setup`
   * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Now you can visit your ngrok URL from your browser.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## Deployment
 
-## Learn more
+Ready to run in production? See our [deployment guide](DEPLOYMENT.md).
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+---
+
+Copyright (c) 2022 Max Gorin, released under MIT
