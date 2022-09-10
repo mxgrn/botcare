@@ -18,6 +18,7 @@ jobs:
         elixir: [1.14.0]
         # host port that will be mapped to Docker's 4000
         port: [8030]
+        host: [159.89.18.195, 159.89.26.201]
 
     steps:
       - name: Checkout
@@ -38,7 +39,7 @@ jobs:
       - name: Pull image on host, restart, run migrations
         uses: appleboy/ssh-action@master
         with:
-          host: 159.89.18.195
+          host: ${{matrix.host}}
           username: deploy
           key: ${{ secrets.DEPLOYMENT_KEY }}
           envs: SECRET_KEY_BASE,DATABASE_URL
@@ -46,7 +47,6 @@ jobs:
           script: |
             docker pull ghcr.io/mxgrn/${{matrix.app}}
             docker stop ${{matrix.app}}_prod || true
-            docker run -d --rm -e SECRET_KEY_BASE=${{secrets.SECRET_KEY_BASE}} -e DATABASE_URL=${{secrets.DATABASE_URL}} ghcr.io/mxgrn/${{matrix.app}} /app/bin/migrate
             docker run --name=${{matrix.app}}_prod -d --rm -p ${{matrix.port}}:4000 \
               -e PHX_SERVER=true \
               -e SECRET_KEY_BASE=${{secrets.SECRET_KEY_BASE}} \
@@ -57,3 +57,5 @@ jobs:
               -e CLOAK_KEY=${{secrets.CLOAK_KEY}} \
               -e PHX_HOST=${{secrets.PHX_HOST}} \
               ghcr.io/mxgrn/${{matrix.app}}
+            while [ "`docker inspect -f {{.State.Running}} ${{matrix.app}}_prod`" != "true" ]; do sleep 1; done
+            docker exec botcare_prod /app/bin/migrate
