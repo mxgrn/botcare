@@ -47,7 +47,8 @@ jobs:
           script: |
             docker pull ghcr.io/mxgrn/${{matrix.app}}
             docker stop ${{matrix.app}}_prod || true
-            docker run --name=${{matrix.app}}_prod -d --rm -p ${{matrix.port}}:4000 \
+            docker rm ${{matrix.app}}_${{matrix.env}} || true
+            docker run --name=${{matrix.app}}_prod -d -p ${{matrix.port}}:4000 \
               -e PHX_SERVER=true \
               -e SECRET_KEY_BASE=${{secrets.SECRET_KEY_BASE}} \
               -e DATABASE_URL=${{secrets.DATABASE_URL}} \
