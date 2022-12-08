@@ -27,11 +27,12 @@ Create DB:
 
 After this you'll be able to connect from the app host (probably on the same network) with:
 
-    postgres://botcare_prod:<password>@<db-host-IP>:5432/botcare_prod
+    psql postgres://botcare_prod:<password>@<db-host-IP>:5432/botcare_prod
 
 ### Github secrets
 
-`DEPLOYMENT_KEY` must be the private part of the key accepted by `.ssh/authorized_keys` of the user "deploy".
+`DEPLOYMENT_KEY` must be the private part of the key accepted by `.ssh/authorized_keys` of the user "deploy" on the app
+host.
 
 ### Authenticating with ghcr.io
 
