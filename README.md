@@ -1,4 +1,4 @@
-# Botcare
+# Botcare!
 
 This self-hosted webapp helps you quickly put your Telegram bots in and out of the "maintenance mode".
 
