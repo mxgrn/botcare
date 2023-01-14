@@ -3,7 +3,7 @@ name: Production
 on:
   push:
     branches:
-      - master
+      - new-deploy
 
 jobs:
   build:
@@ -13,12 +13,12 @@ jobs:
       matrix:
         app: [botcare]
         env: [prod]
-        os: [ubuntu-18.04]
-        otp: [25.0.3]
-        elixir: [1.14.0]
+        os: [ubuntu-latest]
+        otp: [25.2]
+        elixir: [1.14.2]
         # host port that will be mapped to Docker's 4000
         port: [8030]
-        host: [159.89.18.195]
+        host: [46.101.106.59]
 
     steps:
       - name: Checkout

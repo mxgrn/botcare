@@ -25,9 +25,22 @@ Create DB:
 
     create database botcare_prod with owner = botcare_prod;
 
-After this you'll be able to connect from the app host (probably on the same network) with:
+After this you'll be able to connect from the app host (should be on the same private network, which implies the same
+Digital Ocean region) with:
 
     psql postgres://botcare_prod:<password>@<db-host-IP>:5432/botcare_prod
+
+If getting a PG authorization error like this:
+
+    Error: out: 05:15:04.293 [error] Postgrex.Protocol (#PID<0.136.0>) failed to connect: ** (Postgrex.Error) FATAL 28000 (invalid_authorization_specification) no pg_hba.conf entry for host "x.x.x.x", user "botcare_prod", database "botcare_prod", SSL off
+
+... update `/etc/postgresql/<version>/main/pg_hba.conf` to include:
+
+    host    all             all             x.x.x.x/32            md5
+
+... where `x.x.x.x` is the private network address of the app host, then restart Postgres:
+
+    sudo systemctl restart postgresql
 
 ### Github secrets
 
@@ -37,8 +50,12 @@ host.
 ### Authenticating with ghcr.io
 
   * SSH to the app host
-  * Run `docker login ghcr.io`, authenticate with GH username and PAT (personal access token) generated with
+  * As the `deploy` user, run `docker login ghcr.io`, authenticate with GH username and PAT (personal access token) generated with
   write/read/delete:packeges scopes
+    * If getting a `/var/run/docker.sock` permission problem, add `deploy` to the `docker` group:
+
+      sudo usermod -a -G docker deploy
+
   * Make sure that `docker pull ghcr.io/<your-GH-username>/botcare` works
 
 ### NGINX
