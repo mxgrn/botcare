@@ -43,6 +43,7 @@ jobs:
           envs: SECRET_KEY_BASE,DATABASE_URL
           script_stop: true
           script: |
+            echo "${{secrets.GITHUB_TOKEN}}" | docker login https://ghcr.io -u ${{github.actor}} --password-stdin
             docker pull ghcr.io/mxgrn/${{matrix.app}}
             docker stop ${{matrix.app}}_${{matrix.env}} || true
             docker rm ${{matrix.app}}_${{matrix.env}} || true
