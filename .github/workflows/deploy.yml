@@ -7,18 +7,16 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
     name: Deploy
     strategy:
       matrix:
         app: [botcare]
         env: [prod]
         os: [ubuntu-latest]
-        otp: [25.2]
-        elixir: [1.14.2]
         # host port that will be mapped to Docker's 4000
         port: [8030]
         host: [46.101.106.59]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout
@@ -49,6 +47,7 @@ jobs:
             docker stop ${{matrix.app}}_${{matrix.env}} || true
             docker rm ${{matrix.app}}_${{matrix.env}} || true
             docker run --name=${{matrix.app}}_${{matrix.env}} -d -p ${{matrix.port}}:4000 \
+              --restart always \
               -e PHX_SERVER=true \
               -e SECRET_KEY_BASE=${{secrets.SECRET_KEY_BASE}} \
               -e DATABASE_URL=${{secrets.DATABASE_URL}} \

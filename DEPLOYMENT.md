@@ -51,7 +51,7 @@ host.
 
   * SSH to the app host
   * As the `deploy` user, run `docker login ghcr.io`, authenticate with GH username and PAT (personal access token) generated with
-  write/read/delete:packeges scopes
+  write/read/delete:packages scopes
     * If getting a `/var/run/docker.sock` permission problem, add `deploy` to the `docker` group:
 
       sudo usermod -a -G docker deploy
