@@ -15,7 +15,7 @@ jobs:
         os: [ubuntu-latest]
         # host port that will be mapped to Docker's 4000
         port: [8030]
-        host: [46.101.106.59]
+        host: [5.75.226.35]
     runs-on: ${{ matrix.os }}
 
     steps:
