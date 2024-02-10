@@ -1,5 +1,5 @@
 import Config
 
-config :botcare, BotcareWeb.Endpoint, url: [host: "ngrok-generated-string.ngrok.io"]
+config :botcare, BotcareWeb.Endpoint, url: [host: "botcare.loclx.io"]
 
-System.put_env("TELEGRAM_WEBHOOK_SECRET", "StXuzKARHjcdVvwcjWME")
+config :botcare, :telegram, webhook_secret: "StXuzKARHjcdVvwcjWME"

@@ -70,6 +70,8 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base
 
+  config :botcare, :telegram, webhook_secret: System.fetch_env!("TELEGRAM_WEBHOOK_SECRET")
+
   # ## Configuring the mailer
   #
   # In production you need to configure the mailer to use a different adapter.
@@ -88,5 +90,3 @@ if config_env() == :prod do
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
 end
-
-config :botcare, :telegram, webhook_secret: System.fetch_env!("TELEGRAM_WEBHOOK_SECRET")

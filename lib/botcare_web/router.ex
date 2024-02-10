@@ -11,7 +11,9 @@ defmodule BotcareWeb.Router do
   end
 
   pipeline :auth do
-    plug :basic_auth
+    if Mix.env() == :prod do
+      plug :basic_auth
+    end
   end
 
   pipeline :api do
